@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حلقة القرآن الكريم</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A3A2A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="حلقة القرآن">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cairo',sans-serif;background:#FAF7F0;direction:rtl;}
+header{background:linear-gradient(135deg,#1A3A2A,#2D5E3E);color:#E8D08A;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;}
+header h1{font-family:'Amiri',serif;font-size:1.45rem;}
+header p{font-size:0.73rem;color:#a0c4a8;}
+.top-tabs{background:#0f2418;display:flex;border-bottom:3px solid #C9A84C;overflow-x:auto;}
+.top-tab{padding:11px 22px;color:#7ab890;background:none;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.85rem;font-weight:700;border-bottom:3px solid transparent;margin-bottom:-3px;white-space:nowrap;}
+.top-tab.on{color:#E8D08A;border-bottom-color:#C9A84C;background:rgba(255,255,255,.06);}
+.tabs{background:#1A3A2A;display:flex;border-bottom:2px solid #3a6e4a;overflow-x:auto;}
+.tab{padding:8px 16px;color:#a0c4a8;background:none;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.8rem;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;}
+.tab.on{color:#E8D08A;border-bottom-color:#C9A84C;}
+.tpanel{display:none;}.tpanel.on{display:block;}
+.panel{display:none;}.panel.on{display:block;}
+.bar{background:#F0EBE0;border-bottom:2px solid #D4C99A;padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.bar label{font-size:0.82rem;font-weight:600;color:#1A3A2A;white-space:nowrap;}
+input[type=date],input[type=text],input[type=tel],select{font-family:'Cairo',sans-serif;font-size:0.82rem;border:1.5px solid #D4C99A;border-radius:7px;padding:5px 9px;background:#fff;color:#111;}
+input[type=text].ctrl{width:155px;}
+.btn{font-family:'Cairo',sans-serif;font-size:0.8rem;font-weight:700;padding:6px 14px;border-radius:7px;border:none;cursor:pointer;white-space:nowrap;}
+.btn-g{background:#2D5E3E;color:#fff;}.btn-g:hover{background:#1A3A2A;}
+.btn-y{background:#C9A84C;color:#1A3A2A;}.btn-y:hover{background:#b8963e;}
+.btn-r{background:#fff;color:#c0392b;border:1.5px solid #c0392b;}
+.btn-b{background:#2471a3;color:#fff;}.btn-b:hover{background:#1a5276;}
+.ok{font-size:0.78rem;color:#2D7A4A;opacity:0;transition:opacity .3s;}.ok.show{opacity:1;}
+.main{padding:18px 20px;}
+.sec{font-family:'Amiri',serif;font-size:1.1rem;color:#1A3A2A;border-right:4px solid #C9A84C;padding-right:10px;margin-bottom:12px;}
+.info{background:#e8f5ec;border:1px solid #a8d5b5;border-radius:9px;padding:10px 14px;font-size:0.82rem;color:#2D5E3E;margin-bottom:14px;}
+
+/* ROSTER */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+.rcard{background:#fff;border:1.5px solid #D4C99A;border-radius:9px;padding:8px 11px;display:flex;flex-direction:column;gap:6px;}
+.rcard:focus-within{border-color:#C9A84C;box-shadow:0 0 0 3px rgba(201,168,76,.18);}
+.rcard-row{display:flex;align-items:center;gap:7px;}
+.rno{min-width:24px;height:24px;background:#2D5E3E;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;flex-shrink:0;}
+.rinp{flex:1;border:none;outline:none;font-family:'Cairo',sans-serif;font-size:0.88rem;color:#111;background:transparent;direction:rtl;min-width:0;width:100%;}
+.rinp::placeholder{color:#ccc;}
+.rpinp{flex:1;border:none;outline:none;font-family:'Cairo',sans-serif;font-size:0.78rem;color:#555;background:transparent;direction:ltr;text-align:right;min-width:0;width:100%;}
+.rpinp::placeholder{color:#ccc;font-size:0.72rem;}
+
+/* TABLE */
+.twrap{overflow-x:auto;border-radius:11px;border:1px solid #D4C99A;box-shadow:0 3px 16px rgba(26,58,42,.1);}
+table{width:100%;border-collapse:collapse;background:#fff;font-size:0.82rem;}
+thead tr{background:linear-gradient(90deg,#1A3A2A,#2D5E3E);}
+th{padding:10px 6px;color:#E8D08A;font-weight:600;text-align:center;font-size:0.77rem;white-space:nowrap;}
+th:nth-child(2){text-align:right;padding-right:10px;}
+tbody tr{border-bottom:1px solid #EDE8DC;}
+tbody tr:hover{background:#f5f0e8;}
+td{padding:7px 5px;text-align:center;vertical-align:middle;}
+td:nth-child(2){text-align:right;padding-right:10px;}
+.sno{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#4A8C62;color:#fff;border-radius:50%;font-size:0.63rem;font-weight:700;}
+.sname{font-weight:600;font-size:0.85rem;}
+.sempty{color:#ddd;font-size:0.76rem;}
+.cinp{border:1.5px solid transparent;border-radius:6px;padding:4px;width:90px;text-align:center;font-family:'Cairo',sans-serif;font-size:0.79rem;background:transparent;color:#111;direction:rtl;}
+.cinp:focus{border-color:#C9A84C;background:#fffdf5;outline:none;}
+.gsel{border:1.5px solid transparent;border-radius:6px;padding:4px;font-family:'Cairo',sans-serif;font-size:0.77rem;background:transparent;cursor:pointer;color:#111;}
+.gsel:focus{border-color:#C9A84C;background:#fffdf5;outline:none;}
+.fbar{background:#F0EBE0;border-top:2px solid #D4C99A;padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+/* ABSENT */
+tr.absent{background:#fff0f0!important;}
+tr.absent:hover{background:#ffe4e4!important;}
+tr.absent .cinp,tr.absent .gsel{visibility:hidden;}
+.abs-btn{font-family:'Cairo',sans-serif;font-size:0.72rem;font-weight:700;padding:4px 8px;border-radius:6px;border:none;cursor:pointer;transition:all .18s;white-space:nowrap;}
+.abs-btn.off{background:#fff0f0;color:#c0392b;border:1.5px solid #e9a0a0;}
+.abs-btn.on{background:#c0392b;color:#fff;border:1.5px solid #c0392b;}
+
+/* WHATSAPP */
+.wa-btn{background:#25D366;color:#fff;border:none;border-radius:7px;padding:5px 9px;cursor:pointer;font-size:0.95rem;line-height:1;transition:background .2s;}
+.wa-btn:hover{background:#128C7E;}
+.wa-dash{color:#ddd;font-size:0.75rem;}
+
+/* STATS */
+.abs-wrap{padding:20px;}
+.ctrl-box{background:#F0EBE0;border:1px solid #D4C99A;border-radius:11px;padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.ctrl-box label{font-weight:700;color:#1A3A2A;font-size:0.85rem;white-space:nowrap;}
+.abs-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+.abs-card{background:#fff;border:1.5px solid #D4C99A;border-radius:11px;overflow:hidden;box-shadow:0 2px 9px rgba(26,58,42,.07);}
+.abs-card-head{background:linear-gradient(90deg,#1A3A2A,#2D5E3E);color:#E8D08A;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.abs-badge{background:#c0392b;color:#fff;border-radius:20px;padding:2px 8px;font-size:0.74rem;font-weight:700;white-space:nowrap;}
+.abs-badge.zero{background:#2D5E3E;}
+.abs-card-body{padding:10px 12px;}
+.detail-btn{font-family:'Cairo',sans-serif;font-size:0.75rem;color:#2471a3;background:none;border:none;cursor:pointer;font-weight:600;}
+.detail-list{margin-top:6px;display:none;}
+.detail-list.open{display:block;}
+.detail-item{font-size:0.74rem;color:#444;padding:3px 0;border-bottom:1px dashed #eee;}
+
+/* WEEKLY */
+.wk-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px;margin-bottom:18px;}
+.wk-stat{background:#fff;border:1.5px solid #D4C99A;border-radius:10px;padding:11px 12px;text-align:center;}
+.wk-stat-val{font-size:1.35rem;font-weight:700;color:#1A3A2A;}
+.wk-stat-lbl{font-size:0.7rem;color:#888;margin-top:2px;}
+.wk-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;}
+.wk-card{background:#fff;border:1.5px solid #D4C99A;border-radius:11px;overflow:hidden;box-shadow:0 2px 9px rgba(26,58,42,.07);}
+.wk-card-head{background:linear-gradient(90deg,#1A3A2A,#2D5E3E);color:#E8D08A;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;}
+.wk-card-body{padding:10px 12px;}
+.wk-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed #eee;font-size:0.79rem;}
+.wk-row:last-child{border-bottom:none;}
+.wk-lbl{color:#555;}
+.wk-val{font-weight:700;color:#1A3A2A;font-size:0.79rem;}
+.wk-grade{display:inline-block;border-radius:4px;padding:1px 7px;font-size:0.74rem;font-weight:700;border:1.5px solid;}
+.wk-toggle{font-family:'Cairo',sans-serif;font-size:0.74rem;color:#2471a3;background:none;border:none;cursor:pointer;font-weight:600;margin-top:5px;}
+.wk-day-row{font-size:0.74rem;color:#444;padding:3px 6px;background:#f9f7f2;border-radius:4px;margin-bottom:3px;display:flex;gap:6px;flex-wrap:wrap;}
+
+/* PRINT */
+@media print{
+  @page{size:A4;margin:13mm 10mm;}
+  header,.top-tabs,.tabs,.bar,.fbar,.nopr{display:none!important;}
+  .tpanel,.panel{display:none!important;}
+  .pwr{display:block!important;}
+  .pp{page-break-after:always;}.pp:last-child{page-break-after:avoid;}
+  .ph{text-align:center;border-bottom:2px solid #2D5E3E;padding-bottom:8px;margin-bottom:10px;}
+  .pt{font-family:'Amiri',serif;font-size:16pt;color:#1A3A2A;}
+  .pa{font-family:'Amiri',serif;font-size:9pt;color:#2D5E3E;margin:2px 0;}
+  .pm{font-size:8.5pt;color:#555;}
+  .ptb{width:100%;border-collapse:collapse;font-size:8.5pt;}
+  .ptb th{background:#1A3A2A!important;color:#E8D08A!important;padding:6px 4px;border:1px solid #1A3A2A;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ptb th:nth-child(2){text-align:right;padding-right:7px;}
+  .ptb td{border:1px solid #ccc;padding:5px 4px;text-align:center;}
+  .ptb td:nth-child(2){text-align:right;padding-right:7px;font-weight:600;}
+  .ptb tr:nth-child(even) td{background:#f8f6f0;}
+  .pf{margin-top:7px;font-size:7pt;color:#888;text-align:center;border-top:1px solid #ccc;padding-top:5px;}
+  .ltr{border:2px solid #2D5E3E;border-radius:6px;padding:11px;margin-bottom:11px;}
+  .lh{display:flex;justify-content:space-between;border-bottom:1px solid #2D5E3E;padding-bottom:6px;margin-bottom:7px;}
+  .lt{font-family:'Amiri',serif;font-size:11.5pt;color:#1A3A2A;}
+  .ld{font-size:8pt;color:#555;text-align:left;}
+  .lb{font-size:8.5pt;line-height:1.8;}
+  .lr{display:flex;gap:9px;margin:4px 0;}
+  .lf{display:flex;align-items:center;gap:4px;flex:1;}
+  .ll{color:#2D5E3E;font-weight:700;white-space:nowrap;font-size:8pt;}
+  .lv{border-bottom:1px dotted #999;flex:1;min-height:15px;font-size:8.5pt;padding:0 3px;}
+  .gb{display:inline-block;border:1.5px solid;border-radius:3px;padding:1px 6px;font-weight:700;font-size:9pt;}
+  .ln{margin-top:7px;font-size:7.5pt;color:#555;border-top:1px dashed #ccc;padding-top:5px;}
+  .sr{display:flex;justify-content:space-between;margin-top:11px;font-size:7.5pt;}
+  .sc{text-align:center;}
+  .sl{border-top:1px solid #555;padding-top:3px;margin-top:16px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div><h1>🕌 حلقة القرآن الكريم</h1><p>نظام متابعة الطلاب اليومية</p></div>
+  <span style="font-size:1.9rem">📖</span>
+</header>
+
+<div class="top-tabs nopr">
+  <button class="top-tab on"  id="tt-h1"     onclick="topTab('h1')">📋 الحلقة الأولى</button>
+  <button class="top-tab"     id="tt-h2"     onclick="topTab('h2')">📋 الحلقة الثانية</button>
+  <button class="top-tab"     id="tt-absent" onclick="topTab('absent')">📊 إحصاء الغياب</button>
+  <button class="top-tab"     id="tt-weekly" onclick="topTab('weekly')">📑 التقرير الأسبوعي</button>
+</div>
+
+<!-- HALAQAH 1 -->
+<div class="tpanel on" id="tp-h1">
+  <div class="tabs nopr">
+    <button class="tab on" id="h1-t-daily"   onclick="subTab(1,'daily')">📋 المتابعة اليومية</button>
+    <button class="tab"    id="h1-t-roster"  onclick="subTab(1,'roster')">👥 أسماء الطلاب</button>
+    <button class="tab"    id="h1-t-history" onclick="subTab(1,'history')">📜 سجل الطلاب</button>
+  </div>
+  <div class="panel on" id="h1-p-daily">
+    <div class="bar nopr">
+      <label>التاريخ:</label><input type="date" id="h1-date">
+      <label>المعلم:</label><input type="text" class="ctrl" id="h1-teacher" placeholder="اسم المعلم">
+      <label>الحلقة:</label><input type="text" class="ctrl" id="h1-name" placeholder="اسم الحلقة">
+      <button class="btn btn-g" onclick="saveDay(1)">💾 حفظ</button>
+      <button class="btn btn-y" onclick="doPrint(1)">🖨️ طباعة</button>
+      <span class="ok" id="ok-h1">✅ تم الحفظ</span>
+    </div>
+    <div class="main">
+      <div class="sec">جدول متابعة الطلاب — الحلقة الأولى</div>
+      <div class="twrap"><table>
+        <thead><tr><th>#</th><th>اسم الطالب</th><th>مقدار الحفظ</th><th>تقدير الحفظ</th><th>مقدار المراجعة</th><th>تقدير المراجعة</th><th>ملاحظات</th><th>الحضور</th><th>واتساب</th></tr></thead>
+        <tbody id="h1-body"></tbody>
+      </table></div>
+    </div>
+    <div class="fbar nopr">
+      <button class="btn btn-g" onclick="saveDay(1)">💾 حفظ</button>
+      <button class="btn btn-y" onclick="doPrint(1)">🖨️ طباعة الكل</button>
+    </div>
+  </div>
+  <div class="panel" id="h1-p-roster">
+    <div class="bar nopr">
+      <button class="btn btn-g" onclick="saveRoster(1)">💾 حفظ الأسماء</button>
+      <button class="btn btn-b" onclick="sortRoster(1)">🔤 ترتيب أبجدي</button>
+      <button class="btn btn-r" onclick="clearRoster(1)">🗑️ مسح</button>
+      <span class="ok" id="ok-r1">✅ تم الحفظ</span>
+    </div>
+    <div class="main">
+      <div class="info">💡 أدخل اسم الطالب ورقم واتساب ولي الأمر مرة واحدة — تُحفظ تلقائياً.</div>
+      <div class="sec">قائمة طلاب الحلقة الأولى</div>
+      <div class="rgrid" id="h1-roster"></div>
+    </div>
+  </div>
+  <div class="panel" id="h1-p-history">
+    <div class="bar nopr">
+      <label>الطالب:</label><select id="h1-hist-student" style="width:190px"></select>
+      <label>من:</label><input type="date" id="h1-hist-from">
+      <label>إلى:</label><input type="date" id="h1-hist-to">
+      <button class="btn btn-b" onclick="showHistory(1)">🔍 عرض السجل</button>
+    </div>
+    <div class="main"><div id="h1-hist-result"></div></div>
+  </div>
+</div>
+
+<!-- HALAQAH 2 -->
+<div class="tpanel" id="tp-h2">
+  <div class="tabs nopr">
+    <button class="tab on" id="h2-t-daily"   onclick="subTab(2,'daily')">📋 المتابعة اليومية</button>
+    <button class="tab"    id="h2-t-roster"  onclick="subTab(2,'roster')">👥 أسماء الطلاب</button>
+    <button class="tab"    id="h2-t-history" onclick="subTab(2,'history')">📜 سجل الطلاب</button>
+  </div>
+  <div class="panel on" id="h2-p-daily">
+    <div class="bar nopr">
+      <label>التاريخ:</label><input type="date" id="h2-date">
+      <label>المعلم:</label><input type="text" class="ctrl" id="h2-teacher" placeholder="اسم المعلم">
+      <label>الحلقة:</label><input type="text" class="ctrl" id="h2-name" placeholder="اسم الحلقة">
+      <button class="btn btn-g" onclick="saveDay(2)">💾 حفظ</button>
+      <button class="btn btn-y" onclick="doPrint(2)">🖨️ طباعة</button>
+      <span class="ok" id="ok-h2">✅ تم الحفظ</span>
+    </div>
+    <div class="main">
+      <div class="sec">جدول متابعة الطلاب — الحلقة الثانية</div>
+      <div class="twrap"><table>
+        <thead><tr><th>#</th><th>اسم الطالب</th><th>مقدار الحفظ</th><th>تقدير الحفظ</th><th>مقدار المراجعة</th><th>تقدير المراجعة</th><th>ملاحظات</th><th>الحضور</th><th>واتساب</th></tr></thead>
+        <tbody id="h2-body"></tbody>
+      </table></div>
+    </div>
+    <div class="fbar nopr">
+      <button class="btn btn-g" onclick="saveDay(2)">💾 حفظ</button>
+      <button class="btn btn-y" onclick="doPrint(2)">🖨️ طباعة الكل</button>
+    </div>
+  </div>
+  <div class="panel" id="h2-p-roster">
+    <div class="bar nopr">
+      <button class="btn btn-g" onclick="saveRoster(2)">💾 حفظ الأسماء</button>
+      <button class="btn btn-b" onclick="sortRoster(2)">🔤 ترتيب أبجدي</button>
+      <button class="btn btn-r" onclick="clearRoster(2)">🗑️ مسح</button>
+      <span class="ok" id="ok-r2">✅ تم الحفظ</span>
+    </div>
+    <div class="main">
+      <div class="info">💡 أدخل اسم الطالب ورقم واتساب ولي الأمر مرة واحدة — تُحفظ تلقائياً.</div>
+      <div class="sec">قائمة طلاب الحلقة الثانية</div>
+      <div class="rgrid" id="h2-roster"></div>
+    </div>
+  </div>
+  <div class="panel" id="h2-p-history">
+    <div class="bar nopr">
+      <label>الطالب:</label><select id="h2-hist-student" style="width:190px"></select>
+      <label>من:</label><input type="date" id="h2-hist-from">
+      <label>إلى:</label><input type="date" id="h2-hist-to">
+      <button class="btn btn-b" onclick="showHistory(2)">🔍 عرض السجل</button>
+    </div>
+    <div class="main"><div id="h2-hist-result"></div></div>
+  </div>
+</div>
+
+<!-- ABSENCE STATS -->
+<div class="tpanel" id="tp-absent">
+  <div class="abs-wrap">
+    <div class="sec">📊 إحصاء الغياب</div>
+    <div class="ctrl-box">
+      <label>من:</label><input type="date" id="abs-from">
+      <label>إلى:</label><input type="date" id="abs-to">
+      <label>الحلقة:</label>
+      <select id="abs-which">
+        <option value="both">الحلقتان</option>
+        <option value="1">الحلقة الأولى</option>
+        <option value="2">الحلقة الثانية</option>
+      </select>
+      <button class="btn btn-b" onclick="calcAbsence()">🔍 احتساب</button>
+    </div>
+    <div id="abs-result"></div>
+  </div>
+</div>
+
+<!-- WEEKLY REPORT -->
+<div class="tpanel" id="tp-weekly">
+  <div class="bar nopr">
+    <label>من:</label><input type="date" id="wk-from">
+    <label>إلى:</label><input type="date" id="wk-to">
+    <label>الحلقة:</label>
+    <select id="wk-which">
+      <option value="1">الحلقة الأولى</option>
+      <option value="2">الحلقة الثانية</option>
+    </select>
+    <button class="btn btn-b" onclick="buildWeekly()">🔍 إنشاء التقرير</button>
+    <button class="btn btn-y" onclick="printWeekly()">🖨️ طباعة</button>
+  </div>
+  <div class="main" id="wk-result"></div>
+</div>
+
+<div class="pwr" id="pWrap" style="display:none"></div>
+
+<script>
+var GR=['ممتاز','جيد جداً','جيد','مقبول','ضعيف'];
+var GC={'ممتاز':'#1a6e35','جيد جداً':'#2a7a9e','جيد':'#2a7a9e','مقبول':'#c07000','ضعيف':'#c0392b'};
+var GS={'ممتاز':5,'جيد جداً':4,'جيد':3,'مقبول':2,'ضعيف':1};
+var GF=['','ضعيف','مقبول','جيد','جيد جداً','ممتاز'];
+
+// roster stores objects: {n: name, p: phone}
+var DEF1=['أسيد حسام حسون','الحسن سالم دقاق','أمير محمد محمود','أنس محمد بلال','خالد سالم دقاق','عبدالله عبدوه عبدالله','مصطفى مولاي','يزن حسن الشلبي'];
+var names={1:[],2:[]};
+var day={1:{},2:{}};
+
+function rk(h){return 'hq'+h+'_r2';}
+function dk(h){return 'hq'+h+'_day_'+(document.getElementById('h'+h+'-date').value||'x');}
+function cfg(k,v){if(v!==undefined)localStorage.setItem('hq_c_'+k,v);else return localStorage.getItem('hq_c_'+k)||'';}
+function flash(id){var e=document.getElementById(id);e.classList.add('show');setTimeout(function(){e.classList.remove('show');},2000);}
+function fmtAr(ds){if(!ds)return'';return new Date(ds).toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+function getName(h,i){var o=names[h][i];return o?o.n||'':"";}
+function getPhone(h,i){var o=names[h][i];return o?o.p||'':"";}
+
+function topTab(t){
+  ['h1','h2','absent','weekly'].forEach(function(x){
+    document.getElementById('tp-'+x).classList.toggle('on',x===t);
+    document.getElementById('tt-'+x).classList.toggle('on',x===t);
+  });
+}
+function subTab(h,t){
+  if(t==='history')fillHistorySelect(h);
+  ['daily','roster','history'].forEach(function(x){
+    document.getElementById('h'+h+'-p-'+x).classList.toggle('on',x===t);
+    document.getElementById('h'+h+'-t-'+x).classList.toggle('on',x===t);
+  });
+}
+
+// ROSTER
+function loadRoster(h){
+  var raw=localStorage.getItem(rk(h));
+  names[h]=[];
+  if(raw){
+    try{names[h]=JSON.parse(raw);}catch(e){}
+  }
+  // if empty init with defaults for h1
+  if(!names[h].length){
+    var defs=h===1?DEF1:[];
+    for(var i=0;i<20;i++){
+      names[h].push({n:defs[i]||'',p:''});
+    }
+  }
+  while(names[h].length<20)names[h].push({n:'',p:''});
+}
+
+function saveRoster(h){
+  var cards=document.querySelectorAll('#h'+h+'-roster .rcard');
+  cards.forEach(function(card,i){
+    var ni=card.querySelector('.rinp');
+    var pi=card.querySelector('.rpinp');
+    names[h][i]={n:ni?ni.value:'',p:pi?pi.value.replace(/\D/g,''):''};
+  });
+  localStorage.setItem(rk(h),JSON.stringify(names[h]));
+  flash('ok-r'+h);
+  buildDay(h);
+}
+
+function clearRoster(h){
+  if(!confirm('مسح جميع بيانات الحلقة '+h+'؟'))return;
+  names[h]=[];
+  for(var i=0;i<20;i++)names[h].push({n:'',p:''});
+  localStorage.setItem(rk(h),JSON.stringify(names[h]));
+  buildRoster(h);buildDay(h);
+}
+
+function buildRoster(h){
+  var g=document.getElementById('h'+h+'-roster');
+  g.innerHTML='';
+  for(var i=0;i<20;i++){
+    (function(idx){
+      var nm=names[h][idx].n||'';
+      var ph=names[h][idx].p||'';
+
+      var card=document.createElement('div');
+      card.className='rcard';
+
+      // row 1: number + name
+      var r1=document.createElement('div');
+      r1.className='rcard-row';
+      var num=document.createElement('span');
+      num.className='rno';num.textContent=idx+1;
+      var ni=document.createElement('input');
+      ni.type='text';ni.className='rinp';
+      ni.placeholder='اسم الطالب '+(idx+1);
+      ni.value=nm;
+      ni.autocomplete='off';
+      ni.oninput=function(){names[h][idx].n=this.value;};
+      ni.onblur=function(){localStorage.setItem(rk(h),JSON.stringify(names[h]));buildDay(h);};
+      r1.appendChild(num);r1.appendChild(ni);
+
+      // row 2: phone icon + phone
+      var r2=document.createElement('div');
+      r2.className='rcard-row';
+      r2.style.paddingRight='31px';
+      var ic=document.createElement('span');
+      ic.textContent='📱';ic.style.cssText='font-size:.85rem;flex-shrink:0';
+      var pi=document.createElement('input');
+      pi.type='tel';pi.className='rpinp';
+      pi.placeholder='رقم الواتساب (966xxxxxxxxx)';
+      pi.value=ph;
+      pi.autocomplete='off';
+      pi.oninput=function(){names[h][idx].p=this.value.replace(/\D/g,'');};
+      pi.onblur=function(){localStorage.setItem(rk(h),JSON.stringify(names[h]));};
+      r2.appendChild(ic);r2.appendChild(pi);
+
+      card.appendChild(r1);card.appendChild(r2);
+      g.appendChild(card);
+    })(i);
+  }
+}
+
+// DAILY
+function loadDay(h){
+  var savedT=cfg('teacher'+h),savedH=cfg('halaqah'+h);
+  document.getElementById('h'+h+'-teacher').value=savedT;
+  document.getElementById('h'+h+'-name').value=savedH;
+  var raw=localStorage.getItem(dk(h));
+  if(raw){try{var s=JSON.parse(raw);day[h]=s.data||{};}catch(e){day[h]={};}}
+  else day[h]={};
+}
+
+function collectDay(h){
+  document.querySelectorAll('#h'+h+'-body tr').forEach(function(tr,i){
+    var ci=tr.querySelectorAll('.cinp');
+    var gs=tr.querySelectorAll('.gsel');
+    day[h][i]={ha:ci[0]?ci[0].value:'',hg:gs[0]?gs[0].value:'',ma:ci[1]?ci[1].value:'',mg:gs[1]?gs[1].value:'',nt:ci[2]?ci[2].value:'',absent:tr.classList.contains('absent')};
+  });
+}
+
+function saveDay(h){
+  collectDay(h);
+  var t=document.getElementById('h'+h+'-teacher').value;
+  var hn=document.getElementById('h'+h+'-name').value;
+  if(t)cfg('teacher'+h,t);if(hn)cfg('halaqah'+h,hn);
+  localStorage.setItem(dk(h),JSON.stringify({data:day[h],teacher:t,halaqah:hn}));
+  flash('ok-h'+h);
+}
+
+var AT={1:null,2:null};
+function autos(h){clearTimeout(AT[h]);AT[h]=setTimeout(function(){saveDay(h);},700);}
+
+function mkSel(h,val){
+  var s=document.createElement('select');s.className='gsel';
+  var b=document.createElement('option');b.value='';b.textContent='-- اختر --';s.appendChild(b);
+  GR.forEach(function(g){var o=document.createElement('option');o.value=g;o.textContent=g;if(g===val)o.selected=true;s.appendChild(o);});
+  s.onchange=function(){autos(h);};return s;
+}
+function mkInp(h,val,ph,w){
+  var i=document.createElement('input');i.type='text';i.className='cinp';
+  i.placeholder=ph||'';i.value=val||'';if(w)i.style.width=w;
+  i.autocomplete='off';i.oninput=function(){autos(h);};return i;
+}
+
+function buildDay(h){
+  var tb=document.getElementById('h'+h+'-body');
+  if(!tb)return;
+  tb.innerHTML='';
+  for(var i=0;i<20;i++){
+    (function(idx){
+      var nm=names[h][idx].n||'';
+      var ph=names[h][idx].p||'';
+      var d=day[h][idx]||{};
+      var tr=document.createElement('tr');
+      if(d.absent)tr.classList.add('absent');
+
+      // # col
+      var td0=document.createElement('td');
+      var sn=document.createElement('span');sn.className='sno';sn.textContent=idx+1;
+      td0.appendChild(sn);tr.appendChild(td0);
+
+      // name col
+      var td1=document.createElement('td');
+      var sp=document.createElement('span');
+      sp.className=nm?'sname':'sempty';
+      sp.textContent=nm||'—';
+      td1.appendChild(sp);tr.appendChild(td1);
+
+      // data cols
+      [mkInp(h,d.ha,'الآيات/السورة'),mkSel(h,d.hg),mkInp(h,d.ma,'الجزء/السورة'),mkSel(h,d.mg),mkInp(h,d.nt,'ملاحظة...','105px')]
+        .forEach(function(el){var td=document.createElement('td');td.appendChild(el);tr.appendChild(td);});
+
+      // absent btn
+      var tdAb=document.createElement('td');
+      var ab=document.createElement('button');
+      ab.className='abs-btn '+(d.absent?'on':'off');
+      ab.textContent=d.absent?'🔴 غائب':'✅ حاضر';
+      ab.onclick=(function(row,btn){return function(){
+        var now=row.classList.toggle('absent');
+        btn.className='abs-btn '+(now?'on':'off');
+        btn.textContent=now?'🔴 غائب':'✅ حاضر';
+        autos(h);
+      };})(tr,ab);
+      tdAb.appendChild(ab);tr.appendChild(tdAb);
+
+      // whatsapp btn
+      var tdWa=document.createElement('td');
+      if(ph){
+        var wb=document.createElement('button');
+        wb.className='wa-btn';wb.textContent='💬';
+        wb.title='إرسال لولي أمر '+nm;
+        wb.onclick=(function(sNm,sPh,sRow){return function(){
+          var ci=sRow.querySelectorAll('.cinp');
+          var gs=sRow.querySelectorAll('.gsel');
+          var isAbs=sRow.classList.contains('absent');
+          var dt=document.getElementById('h'+h+'-date').value;
+          var halNm=document.getElementById('h'+h+'-name').value||'حلقة القرآن الكريم';
+          var teNm=document.getElementById('h'+h+'-teacher').value||'';
+          var msg='السلام عليكم ورحمة الله وبركاته 🕌\n';
+          msg+='*'+halNm+'*\n';
+          if(teNm)msg+='المعلم: '+teNm+'\n';
+          msg+='التاريخ: '+fmtAr(dt)+'\n\n';
+          msg+='📌 *'+sNm+'*\n\n';
+          if(isAbs){
+            msg+='🔴 *غياب*\nتغيّب الطالب عن الحلقة اليوم.\n';
+          }else{
+            var ha=ci[0]?ci[0].value:'',hg=gs[0]?gs[0].value:'';
+            var ma=ci[1]?ci[1].value:'',mg=gs[1]?gs[1].value:'';
+            var nt=ci[2]?ci[2].value:'';
+            if(ha)msg+='📖 *الحفظ:* '+ha+(hg?' — '+hg:'')+'\n';
+            if(ma)msg+='🔄 *المراجعة:* '+ma+(mg?' — '+mg:'')+'\n';
+            if(nt)msg+='\n📝 *ملاحظة:* '+nt+'\n';
+          }
+          msg+='\nنسأل الله أن يبارك في نجلكم ويجعله من حفظة كتاب الله 🤲';
+          window.open('https://wa.me/'+sPh+'?text='+encodeURIComponent(msg),'_blank');
+        };})(nm,ph,tr);
+        tdWa.appendChild(wb);
+      }else{
+        var dash=document.createElement('span');dash.className='wa-dash';dash.textContent='—';dash.title='أضف رقم واتساب في أسماء الطلاب';
+        tdWa.appendChild(dash);
+      }
+      tr.appendChild(tdWa);
+      tb.appendChild(tr);
+    })(i);
+  }
+}
+
+
+function sortRoster(h){
+  // first collect current inputs
+  var cards=document.querySelectorAll('#h'+h+'-roster .rcard');
+  cards.forEach(function(card,i){
+    var ni=card.querySelector('.rinp');
+    var pi=card.querySelector('.rpinp');
+    names[h][i]={n:ni?ni.value:'',p:pi?pi.value.replace(/\D/g,''):''};
+  });
+  // separate filled and empty
+  var filled=names[h].filter(function(o){return o.n.trim()!=='';});
+  var empty=names[h].filter(function(o){return o.n.trim()==='';});
+  // sort filled alphabetically (Arabic)
+  filled.sort(function(a,b){
+    var an=a.n.replace(/^ال/,'').replace(/[أإآ]/g,'ا');
+    var bn=b.n.replace(/^ال/,'').replace(/[أإآ]/g,'ا');
+    return an.localeCompare(bn,'ar');
+  });
+  // merge: filled first then empty
+  names[h]=filled.concat(empty);
+  while(names[h].length<20)names[h].push({n:'',p:''});
+  localStorage.setItem(rk(h),JSON.stringify(names[h]));
+  buildRoster(h);
+  buildDay(h);
+  flash('ok-r'+h);
+}
+
+function wireTeacher(h){
+  document.getElementById('h'+h+'-teacher').oninput=function(){if(this.value)cfg('teacher'+h,this.value);};
+  document.getElementById('h'+h+'-name').oninput=function(){if(this.value)cfg('halaqah'+h,this.value);};
+}
+
+// HISTORY
+function fillHistorySelect(h){
+  var sel=document.getElementById('h'+h+'-hist-student');
+  sel.innerHTML='';
+  names[h].forEach(function(obj,i){
+    var nm=obj.n||'';
+    if(!nm.trim())return;
+    var o=document.createElement('option');o.value=i;o.textContent=nm;sel.appendChild(o);
+  });
+}
+
+function showHistory(h){
+  var sel=document.getElementById('h'+h+'-hist-student');
+  var from=document.getElementById('h'+h+'-hist-from').value;
+  var to=document.getElementById('h'+h+'-hist-to').value;
+  var idx=parseInt(sel.value);
+  var nm=sel.options[sel.selectedIndex]?sel.options[sel.selectedIndex].textContent:'';
+  if(!nm){alert('اختر طالباً');return;}
+  if(!from||!to){alert('حدد الفترة');return;}
+  var records=[];
+  for(var k in localStorage){
+    if(k.indexOf('hq'+h+'_day_')!==0)continue;
+    var ds=k.replace('hq'+h+'_day_','');
+    if(ds<from||ds>to)continue;
+    try{var rec=JSON.parse(localStorage.getItem(k));var d=(rec.data||{})[idx]||{};records.push({date:ds,d:d});}catch(e){}
+  }
+  records.sort(function(a,b){return a.date>b.date?1:-1;});
+  var res=document.getElementById('h'+h+'-hist-result');
+  if(!records.length){res.innerHTML='<div class="info">لا توجد بيانات لهذا الطالب في الفترة المحددة.</div>';return;}
+  var abs=records.filter(function(r){return r.d.absent;}).length;
+  var pres=records.length-abs;
+  var html='<div class="sec">سجل الطالب: '+nm+'</div>';
+  html+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">';
+  html+='<div class="wk-stat"><div class="wk-stat-val">'+records.length+'</div><div class="wk-stat-lbl">أيام مسجلة</div></div>';
+  html+='<div class="wk-stat"><div class="wk-stat-val" style="color:#1a6e35">'+pres+'</div><div class="wk-stat-lbl">حضور</div></div>';
+  html+='<div class="wk-stat"><div class="wk-stat-val" style="color:#c0392b">'+abs+'</div><div class="wk-stat-lbl">غياب</div></div>';
+  html+='</div><div class="twrap"><table><thead><tr><th>التاريخ</th><th>الحفظ</th><th>تقدير الحفظ</th><th>المراجعة</th><th>تقدير المراجعة</th><th>ملاحظات</th><th>الحضور</th></tr></thead><tbody>';
+  records.forEach(function(r){
+    var d=r.d;
+    if(d.absent){html+='<tr style="background:#fff0f0"><td>'+fmtAr(r.date)+'</td><td colspan="5" style="color:#c0392b;font-weight:700;text-align:center">غائب</td><td>🔴</td></tr>';}
+    else{html+='<tr><td>'+fmtAr(r.date)+'</td><td>'+(d.ha||'—')+'</td><td style="color:'+(GC[d.hg]||'#333')+';font-weight:700">'+(d.hg||'—')+'</td><td>'+(d.ma||'—')+'</td><td style="color:'+(GC[d.mg]||'#333')+';font-weight:700">'+(d.mg||'—')+'</td><td>'+(d.nt||'—')+'</td><td>✅</td></tr>';}
+  });
+  html+='</tbody></table></div>';
+  res.innerHTML=html;
+}
+
+// ABSENCE STATS
+function calcAbsence(){
+  var from=document.getElementById('abs-from').value;
+  var to=document.getElementById('abs-to').value;
+  var which=document.getElementById('abs-which').value;
+  if(!from||!to){alert('حدد التاريخين');return;}
+  var hs=which==='both'?[1,2]:(which==='1'?[1]:[2]);
+  var byName={};
+  hs.forEach(function(h){
+    names[h].forEach(function(obj){var nm=obj.n||'';if(nm.trim()&&!byName[nm])byName[nm]={days:[]};});
+    for(var k in localStorage){
+      if(k.indexOf('hq'+h+'_day_')!==0)continue;
+      var ds=k.replace('hq'+h+'_day_','');
+      if(ds<from||ds>to)continue;
+      try{var rec=JSON.parse(localStorage.getItem(k));var data=rec.data||{};
+        names[h].forEach(function(obj,i){var nm=obj.n||'';if(!nm.trim())return;if(!byName[nm])byName[nm]={days:[]};if(data[i]&&data[i].absent)byName[nm].days.push(ds);});
+      }catch(e){}
+    }
+  });
+  var sorted=Object.keys(byName).sort(function(a,b){return byName[b].days.length-byName[a].days.length;});
+  if(!sorted.length){document.getElementById('abs-result').innerHTML='<div class="info">لا توجد بيانات.</div>';return;}
+  var html='<div class="abs-cards">';
+  sorted.forEach(function(nm){
+    var cnt=byName[nm].days.length;
+    html+='<div class="abs-card"><div class="abs-card-head"><span style="font-weight:700;font-size:.88rem">'+nm+'</span><span class="abs-badge'+(cnt===0?' zero':'')+'">'+cnt+' '+(cnt===0?'✓ لم يغب':'أيام')+'</span></div><div class="abs-card-body">';
+    if(cnt>0){
+      html+='<button class="detail-btn" onclick="var d=this.nextElementSibling;d.classList.toggle(\'open\');this.textContent=d.classList.contains(\'open\')?\'▲ إخفاء\':\'▼ التفاصيل\'">▼ التفاصيل</button><div class="detail-list">';
+      byName[nm].days.sort().forEach(function(ds){html+='<div class="detail-item">'+fmtAr(ds)+'</div>';});
+      html+='</div>';
+    }else{html+='<span style="font-size:.78rem;color:#2D5E3E">حضر جميع الأيام ✓</span>';}
+    html+='</div></div>';
+  });
+  html+='</div>';
+  document.getElementById('abs-result').innerHTML=html;
+}
+
+// WEEKLY
+function getWeekRange(){
+  var t=new Date(),day=t.getDay();
+  var mon=new Date(t);mon.setDate(t.getDate()-(day===0?6:day-1));
+  var sat=new Date(mon);sat.setDate(mon.getDate()+5);
+  function f(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  return{from:f(mon),to:f(sat)};
+}
+function gradeAvg(gs){
+  var v=gs.filter(function(g){return GS[g];});
+  if(!v.length)return'';
+  return GF[Math.round(v.reduce(function(a,g){return a+GS[g];},0)/v.length)]||'';
+}
+function collectWeekly(h,from,to){
+  var res={};
+  names[h].forEach(function(obj,i){var nm=obj.n||'';if(nm.trim())res[i]={name:nm,days:[],hG:[],mG:[],abs:0,pres:0,notes:[]};});
+  for(var k in localStorage){
+    if(k.indexOf('hq'+h+'_day_')!==0)continue;
+    var ds=k.replace('hq'+h+'_day_','');
+    if(ds<from||ds>to)continue;
+    try{var rec=JSON.parse(localStorage.getItem(k));var data=rec.data||{};
+      Object.keys(res).forEach(function(i){var d=data[i]||{};
+        res[i].days.push({date:ds,ha:d.ha||'',hg:d.hg||'',ma:d.ma||'',mg:d.mg||'',nt:d.nt||'',absent:d.absent||false});
+        if(d.absent)res[i].abs++;
+        else{res[i].pres++;if(d.hg)res[i].hG.push(d.hg);if(d.mg)res[i].mG.push(d.mg);if(d.nt)res[i].notes.push({date:ds,note:d.nt});}
+      });
+    }catch(e){}
+  }
+  Object.keys(res).forEach(function(i){res[i].days.sort(function(a,b){return a.date>b.date?1:-1;});});
+  return res;
+}
+function buildWeekly(){
+  var from=document.getElementById('wk-from').value;
+  var to=document.getElementById('wk-to').value;
+  var h=parseInt(document.getElementById('wk-which').value);
+  if(!from||!to){alert('حدد الفترة');return;}
+  var hn=cfg('halaqah'+h)||'الحلقة';
+  var te=cfg('teacher'+h)||'';
+  var data=collectWeekly(h,from,to);
+  var sts=Object.keys(data).map(function(i){return data[i];});
+  if(!sts.length){document.getElementById('wk-result').innerHTML='<div class="info">لا توجد بيانات.</div>';return;}
+  var totP=sts.reduce(function(a,s){return a+s.pres;},0);
+  var totA=sts.reduce(function(a,s){return a+s.abs;},0);
+  var html='<div style="background:#e8f5ec;border:1px solid #a8d5b5;border-radius:9px;padding:11px 14px;margin-bottom:16px;font-size:.84rem;color:#1A3A2A"><b>'+hn+'</b>'+(te?' | المعلم: '+te:'')+' | من: '+fmtAr(from)+' إلى: '+fmtAr(to)+'</div>';
+  html+='<div class="wk-summary">';
+  html+='<div class="wk-stat"><div class="wk-stat-val">'+sts.length+'</div><div class="wk-stat-lbl">عدد الطلاب</div></div>';
+  html+='<div class="wk-stat"><div class="wk-stat-val" style="color:#1a6e35">'+totP+'</div><div class="wk-stat-lbl">إجمالي الحضور</div></div>';
+  html+='<div class="wk-stat"><div class="wk-stat-val" style="color:#c0392b">'+totA+'</div><div class="wk-stat-lbl">إجمالي الغياب</div></div>';
+  html+='</div><div class="sec">تفاصيل كل طالب</div><div class="wk-cards">';
+  sts.forEach(function(s){
+    var avgH=gradeAvg(s.hG),avgM=gradeAvg(s.mG);
+    var hc=GC[avgH]||'#333',mc=GC[avgM]||'#333';
+    var hList=s.days.filter(function(d){return !d.absent&&d.ha;}).map(function(d){return d.ha;}).join('، ');
+    var mList=s.days.filter(function(d){return !d.absent&&d.ma;}).map(function(d){return d.ma;}).join('، ');
+    html+='<div class="wk-card"><div class="wk-card-head"><span style="font-weight:700;font-size:.88rem">'+s.name+'</span><span style="font-size:.74rem"><span style="color:#a8d5b5">'+s.pres+' حضور</span> / <span style="color:#e9a0a0">'+s.abs+' غياب</span></span></div><div class="wk-card-body">';
+    html+='<div class="wk-row"><span class="wk-lbl">📖 مجموع الحفظ</span><span class="wk-val">'+(hList||'—')+'</span></div>';
+    html+='<div class="wk-row"><span class="wk-lbl">معدل الحفظ</span><span class="wk-grade" style="color:'+hc+';border-color:'+hc+'">'+(avgH||'—')+'</span></div>';
+    html+='<div class="wk-row"><span class="wk-lbl">🔄 مجموع المراجعة</span><span class="wk-val">'+(mList||'—')+'</span></div>';
+    html+='<div class="wk-row"><span class="wk-lbl">معدل المراجعة</span><span class="wk-grade" style="color:'+mc+';border-color:'+mc+'">'+(avgM||'—')+'</span></div>';
+    if(s.notes.length){s.notes.forEach(function(n){html+='<div style="font-size:.73rem;color:#555;padding:2px 0">'+fmtAr(n.date)+': '+n.note+'</div>';});}
+    if(s.days.length){
+      html+='<button class="wk-toggle" onclick="var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\';this.textContent=d.style.display===\'block\'?\'▲ إخفاء\':\'▼ تفاصيل يومية\'">▼ تفاصيل يومية</button><div style="display:none;margin-top:5px">';
+      s.days.forEach(function(d){
+        if(d.absent)html+='<div class="wk-day-row" style="background:#fff0f0"><span style="color:#888">'+fmtAr(d.date)+'</span><span style="color:#c0392b;font-weight:700">غائب 🔴</span></div>';
+        else html+='<div class="wk-day-row"><span style="color:#888;white-space:nowrap">'+fmtAr(d.date)+'</span>'+(d.ha?'<span>ح: '+d.ha+'</span>':'')+(d.hg?'<span style="color:'+GC[d.hg]+'">'+d.hg+'</span>':'')+(d.ma?'<span>م: '+d.ma+'</span>':'')+'</div>';
+      });
+      html+='</div>';
+    }
+    html+='</div></div>';
+  });
+  html+='</div>';
+  document.getElementById('wk-result').innerHTML=html;
+}
+function printWeekly(){
+  var from=document.getElementById('wk-from').value;
+  var to=document.getElementById('wk-to').value;
+  var h=parseInt(document.getElementById('wk-which').value);
+  if(!from||!to){alert('حدد الفترة أولاً');return;}
+  var hn=cfg('halaqah'+h)||'الحلقة';
+  var te=cfg('teacher'+h)||'';
+  var data=collectWeekly(h,from,to);
+  var sts=Object.keys(data).map(function(i){return data[i];});
+  if(!sts.length){alert('لا توجد بيانات');return;}
+  var hdr='<div class="ph"><div class="pt">🕌 '+hn+'</div><div class="pa">بسم الله الرحمن الرحيم</div><div class="pm">'+(te?'المعلم: <b>'+te+'</b> | ':'')+' من: <b>'+fmtAr(from)+'</b> إلى <b>'+fmtAr(to)+'</b></div></div>';
+  var rows=sts.map(function(s,i){var avgH=gradeAvg(s.hG),avgM=gradeAvg(s.mG);var hList=s.days.filter(function(d){return !d.absent&&d.ha;}).map(function(d){return d.ha;}).join('، ');var mList=s.days.filter(function(d){return !d.absent&&d.ma;}).map(function(d){return d.ma;}).join('، ');
+    return '<tr><td style="color:#888;font-size:7pt">'+(i+1)+'</td><td>'+s.name+'</td><td style="font-size:7pt">'+hList+'</td><td style="color:'+(GC[avgH]||'#333')+';font-weight:700">'+avgH+'</td><td style="font-size:7pt">'+mList+'</td><td style="color:'+(GC[avgM]||'#333')+';font-weight:700">'+avgM+'</td><td style="color:#1a6e35;font-weight:700">'+s.pres+'</td><td style="color:#c0392b;font-weight:700">'+s.abs+'</td></tr>';}).join('');
+  var html='<div class="pp">'+hdr+'<div style="font-family:Amiri,serif;font-size:11pt;color:#2D5E3E;text-align:center;margin-bottom:10px">التقرير الأسبوعي الإجمالي</div><table class="ptb"><thead><tr><th>#</th><th>اسم الطالب</th><th>مجموع الحفظ</th><th>معدل الحفظ</th><th>مجموع المراجعة</th><th>معدل المراجعة</th><th>حضور</th><th>غياب</th></tr></thead><tbody>'+rows+'</tbody></table><div class="pf">'+hn+' | تقرير أسبوعي | توقيع المعلم: __________________________</div></div>';
+  sts.forEach(function(s){
+    var avgH=gradeAvg(s.hG),avgM=gradeAvg(s.mG),hc=GC[avgH]||'#333',mc=GC[avgM]||'#333';
+    var dRows=s.days.map(function(d){return d.absent?'<tr style="background:#fff0f0"><td>'+fmtAr(d.date)+'</td><td colspan="5" style="color:#c0392b;font-weight:700;text-align:center">غائب</td></tr>':'<tr><td>'+fmtAr(d.date)+'</td><td>'+d.ha+'</td><td style="color:'+(GC[d.hg]||'#333')+';font-weight:700">'+d.hg+'</td><td>'+d.ma+'</td><td style="color:'+(GC[d.mg]||'#333')+';font-weight:700">'+d.mg+'</td><td style="font-size:7pt;color:#555">'+d.nt+'</td></tr>';}).join('');
+    html+='<div class="pp">'+hdr+'<div style="font-family:Amiri,serif;font-size:11pt;color:#2D5E3E;text-align:center;margin-bottom:9px">تقرير الطالب: <b>'+s.name+'</b></div><div style="display:flex;gap:9px;margin-bottom:9px;font-size:8.5pt"><div style="flex:1;border:1px solid #ccc;border-radius:5px;padding:7px;text-align:center"><div style="color:#1a6e35;font-size:13pt;font-weight:700">'+s.pres+'</div><div style="color:#555">حضور</div></div><div style="flex:1;border:1px solid #ccc;border-radius:5px;padding:7px;text-align:center"><div style="color:#c0392b;font-size:13pt;font-weight:700">'+s.abs+'</div><div style="color:#555">غياب</div></div><div style="flex:1;border:1px solid #ccc;border-radius:5px;padding:7px;text-align:center"><div style="color:'+hc+';font-size:12pt;font-weight:700">'+avgH+'</div><div style="color:#555">معدل الحفظ</div></div><div style="flex:1;border:1px solid #ccc;border-radius:5px;padding:7px;text-align:center"><div style="color:'+mc+';font-size:12pt;font-weight:700">'+avgM+'</div><div style="color:#555">معدل المراجعة</div></div></div><table class="ptb"><thead><tr><th>التاريخ</th><th>مقدار الحفظ</th><th>تقدير الحفظ</th><th>مقدار المراجعة</th><th>تقدير المراجعة</th><th>ملاحظات</th></tr></thead><tbody>'+dRows+'</tbody></table><div class="ln" style="margin-top:9px;font-size:8pt">نسأل الله أن يبارك في الطالب ويجعله من أهل القرآن الكريم.</div><div class="sr"><div class="sc"><div>توقيع المعلم</div><div class="sl">______________________</div></div><div class="sc"><div>توقيع ولي الأمر</div><div class="sl">______________________</div></div><div class="sc"><div>تاريخ الاطلاع</div><div class="sl">______________________</div></div></div></div>';
+  });
+  var w=document.getElementById('pWrap');w.innerHTML=html;w.style.display='block';
+  setTimeout(function(){window.print();setTimeout(function(){w.style.display='none';},800);},200);
+}
+
+// DAILY PRINT
+function doPrint(h){
+  saveDay(h);
+  var dt=document.getElementById('h'+h+'-date').value;
+  var te=document.getElementById('h'+h+'-teacher').value||'___________';
+  var hn=document.getElementById('h'+h+'-name').value||'حلقة القرآن الكريم';
+  var da=fmtAr(dt)||dt;
+  var st=names[h].map(function(obj,i){var d=day[h][i]||{};return{name:obj.n||'',ha:d.ha||'',hg:d.hg||'',ma:d.ma||'',mg:d.mg||'',nt:d.nt||'',absent:d.absent||false};});
+  var rows=st.map(function(s,i){
+    if(s.absent)return'<tr style="background:#fff0f0"><td style="color:#888;font-size:7pt">'+(i+1)+'</td><td style="font-weight:600">'+(s.name||'.')+'</td><td colspan="5" style="color:#c0392b;font-weight:700;text-align:center">غـائـب</td></tr>';
+    return'<tr><td style="color:#888;font-size:7pt">'+(i+1)+'</td><td>'+(s.name||'.')+'</td><td>'+s.ha+'</td><td style="color:'+(GC[s.hg]||'#333')+';font-weight:700">'+s.hg+'</td><td>'+s.ma+'</td><td style="color:'+(GC[s.mg]||'#333')+';font-weight:700">'+s.mg+'</td><td style="font-size:7pt;color:#555">'+s.nt+'</td></tr>';
+  }).join('');
+  var html='<div class="pp"><div class="ph"><div class="pt">🕌 '+hn+'</div><div class="pa">بسم الله الرحمن الرحيم</div><div class="pm">المعلم: <b>'+te+'</b> | التاريخ: <b>'+da+'</b></div></div><table class="ptb"><thead><tr><th>#</th><th>اسم الطالب</th><th>مقدار الحفظ</th><th>تقدير الحفظ</th><th>مقدار المراجعة</th><th>تقدير المراجعة</th><th>ملاحظات</th></tr></thead><tbody>'+rows+'</tbody></table><div class="pf">'+hn+' | '+da+' | توقيع المعلم: __________________________</div></div>';
+  var named=st.filter(function(s){return s.name.trim()&&!s.absent;});
+  for(var i=0;i<named.length;i+=3){
+    html+='<div class="pp"><div style="text-align:center;font-family:Amiri,serif;font-size:10pt;color:#2D5E3E;margin-bottom:8px">رسائل المتابعة اليومية لأولياء الأمور</div>';
+    for(var j=i;j<Math.min(i+3,named.length);j++){
+      var s=named[j],hc=GC[s.hg]||'#333',mc=GC[s.mg]||'#333';
+      html+='<div class="ltr"><div class="lh"><div><div class="lt">🕌 '+hn+'</div><div class="pa" style="font-size:8pt">بسم الله الرحمن الرحيم</div></div><div class="ld">التاريخ: '+da+'<br>المعلم: '+te+'</div></div><div class="lb"><div style="margin-bottom:6px">السلام عليكم ورحمة الله وبركاته،<br>نُحيطكم علماً بأداء نجلكم في حلقة القرآن الكريم ليوم '+da+':</div><div class="lr"><div class="lf"><span class="ll">📌 اسم الطالب:</span><span class="lv" style="font-weight:700">'+s.name+'</span></div></div><div class="lr"><div class="lf"><span class="ll">📖 مقدار الحفظ:</span><span class="lv">'+(s.ha||'----')+'</span></div><div class="lf"><span class="ll">⭐ التقدير:</span><span class="gb" style="color:'+hc+';border-color:'+hc+'">'+(s.hg||'----')+'</span></div></div><div class="lr"><div class="lf"><span class="ll">🔄 مقدار المراجعة:</span><span class="lv">'+(s.ma||'----')+'</span></div><div class="lf"><span class="ll">⭐ التقدير:</span><span class="gb" style="color:'+mc+';border-color:'+mc+'">'+(s.mg||'----')+'</span></div></div>'+(s.nt?'<div><span class="ll">📝 ملاحظات: </span>'+s.nt+'</div>':'')+'<div class="ln">نسأل الله أن يبارك في أبنائنا ويجعلهم من أهل القرآن. يُرجى التوقيع وإعادة هذا الإشعار.</div><div class="sr"><div class="sc"><div>توقيع المعلم</div><div class="sl">______________________</div></div><div class="sc"><div>توقيع ولي الأمر</div><div class="sl">______________________</div></div><div class="sc"><div>تاريخ الاطلاع</div><div class="sl">______________________</div></div></div></div></div>';
+    }
+    html+='</div>';
+  }
+  var w=document.getElementById('pWrap');w.innerHTML=html;w.style.display='block';
+  setTimeout(function(){window.print();setTimeout(function(){w.style.display='none';},800);},150);
+}
+
+// INIT
+window.onload=function(){
+  var t=new Date(),y=t.getFullYear(),m=String(t.getMonth()+1).padStart(2,'0'),d=String(t.getDate()).padStart(2,'0');
+  var today=y+'-'+m+'-'+d;
+  var wk=getWeekRange();
+  document.getElementById('h1-date').value=today;
+  document.getElementById('h2-date').value=today;
+  document.getElementById('abs-from').value=today;
+  document.getElementById('abs-to').value=today;
+  document.getElementById('wk-from').value=wk.from;
+  document.getElementById('wk-to').value=wk.to;
+  document.getElementById('h1-hist-from').value=today;
+  document.getElementById('h1-hist-to').value=today;
+  document.getElementById('h2-hist-from').value=today;
+  document.getElementById('h2-hist-to').value=today;
+  [1,2].forEach(function(h){
+    loadRoster(h);buildRoster(h);
+    loadDay(h);buildDay(h);
+    wireTeacher(h);
+    document.getElementById('h'+h+'-date').onchange=function(){loadDay(h);buildDay(h);};
+  });
+};
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
